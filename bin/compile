@@ -55,6 +55,15 @@ esac
 topic "Updating apt caches"
 apt-get $APT_OPTIONS update | indent
 
+public_key=${PUBLIC_KEY:-"xxx"}
+secret_key=${SECRET_KEY:-"xxx"}
+
+echo -n "-----> Cài đặt PM2 ... "
+npm install -g pm2 --save | indent
+pm2 link ${public_key} ${secret_key} | indent
+pm2 install pm2-server-monit | indent
+echo "Cài đặt xong <3"
+
 for PACKAGE in $PACKAGES; do
   if [[ $PACKAGE == *deb ]]; then
     PACKAGE_NAME=$(basename $PACKAGE .deb)
